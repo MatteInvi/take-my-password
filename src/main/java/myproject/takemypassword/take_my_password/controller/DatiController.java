@@ -60,19 +60,27 @@ public class DatiController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit() {
+    public String edit(@PathVariable Integer id, Model model) {
 
+        DatoAccesso dato = datiRepository.findById(id).get();
+        model.addAttribute("dato", dato);
         return "archivio/edit";
     }
 
-    @PostMapping("/edti/{id}")
-    public String update() {
-
-        return "redirect:/index";
+    @PostMapping("/edit/{id}")
+    public String update(@Valid @ModelAttribute ("dato") DatoAccesso datoForm, BindingResult bindingResult,RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()){
+            return "archivio/edit";
+        }
+        datiRepository.save(datoForm);
+        redirectAttributes.addFlashAttribute("success", "Dato modificato con successo!");
+        return "redirect:/";
     }
 
     @PostMapping("delete/{id}")
-    public String delete() {
-        return "redirect:/index";
+    public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        datiRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("success", "Dato eliminato con successo!");
+        return "redirect:/";
     }
 }
