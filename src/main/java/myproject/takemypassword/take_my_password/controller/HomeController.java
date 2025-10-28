@@ -14,23 +14,21 @@ import myproject.takemypassword.take_my_password.model.DatoAccesso;
 import myproject.takemypassword.take_my_password.repository.DatiRepository;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping
 public class HomeController {
 
     @Autowired
     DatiRepository datiRepository;
 
-    @GetMapping
+    @GetMapping("/")
     public String search(Model model, @RequestParam(required = false) String query) {
         List<DatoAccesso> datiAccesso = new ArrayList();
-
-        if (query != null && !query.isEmpty()){
+        if (query != null && !query.isEmpty()) {
             datiAccesso = datiRepository.findByUsernameContainingIgnoreCase(query);
-        } 
+        }
         model.addAttribute("dati", datiAccesso);
 
         return "archivio/search";
     }
-
 
 }

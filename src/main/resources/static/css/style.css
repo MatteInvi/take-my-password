@@ -39,6 +39,11 @@ h1{
     background-color: #1A1D23;
 }
 
+.container{
+  background-color: #4e46e534;
+  color: white;
+}
+
 
 /* Classe generica */
 .button {

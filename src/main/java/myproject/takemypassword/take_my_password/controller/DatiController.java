@@ -7,12 +7,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
 import myproject.takemypassword.take_my_password.model.DatoAccesso;
 import myproject.takemypassword.take_my_password.repository.DatiRepository;
 
@@ -24,28 +28,35 @@ public class DatiController {
     DatiRepository datiRepository;
 
     @GetMapping
-    public String home(Model model){
+    public String home(Model model) {
 
         return "archivio/home";
     }
 
     @GetMapping("/show/{id}")
     public String show(Model model, @PathVariable Integer id) {
-       Optional<DatoAccesso> datoOptional = datiRepository.findById(id);
-        model.addAttribute("dato",datoOptional.get());
+
+        Optional<DatoAccesso> datoOptional = datiRepository.findById(id);
+
+        model.addAttribute("dato", datoOptional.get());
         return "archivio/show";
     }
 
     @GetMapping("/create")
-    public String create(Model model) {
-
+    public String create(Model model){
+        DatoAccesso dato = new DatoAccesso();
+        model.addAttribute("dato", dato);
         return "archivio/create";
     }
 
     @PostMapping("/create")
-    public String save() {
-        
-        return "redirect:/dati";
+    public String save(@Valid @ModelAttribute ("dato") DatoAccesso datoForm, BindingResult bindingResult,RedirectAttributes redirectAttributes)  {
+        if (bindingResult.hasErrors()) {
+            return "archivio/create";
+        }
+        datiRepository.save(datoForm);
+        redirectAttributes.addFlashAttribute("success", "Dato salvato con successo!");
+        return "redirect:/";
     }
 
     @GetMapping("/edit/{id}")

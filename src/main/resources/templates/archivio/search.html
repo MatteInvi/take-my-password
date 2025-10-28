@@ -9,15 +9,17 @@
     <nav th:insert="~{fragments/navbar :: navbar}"></nav>
     <main class="container">
         <h1 class="text-center text-white title">Ricerca dati di accesso</h1>
+        <p th:if="${success}"><strong style="color:green;">[[${success}]]</strong></p>
         <div id="top-bar">
-            <a class="button button-add" href="">Aggiungi Dato</a>
+            <a class="button button-add" th:href="@{|/archive/create|}" >Aggiungi
+                Dato</a>
             <form class="form" id="search-form" method="GET">
                 <input class="form-control" type="text" name="query" id="search">
                 <button class="button button-search" type="submit">Cerca</button>
             </form>
         </div>
 
-        <table th:if="${dati.size > 0}" class="table mt-2">
+        <table  th:if="${dati} and ${dati.size > 0} " class="table mt-2">
             <thead>
                 <tr>
                     <th>id</th>
@@ -33,8 +35,32 @@
                     <td>[[*{password}]]</td>
 
                     <td id="button-section">
-                        <a class="button button-details" th:href="@{|/show/*{id}|}">Dettagli</a>
+                        <button class="button button-details" data-bs-toggle="modal"
+                            th:data-bs-target="'#details-'+*{id}">Dettagli</button>
+                        <!-- Details Modal -->
+                        <div class="modal fade" th:id="'details-'+*{id}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="">Dettagli</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Piattaforma: </strong>[[*{platform}]]</p>
+                                        <p><strong>Utente: </strong>[[*{username}]]</p>
+                                        <p><strong>Password: </strong>[[*{password}]]</p>
+                                        <p><strong>Annotazioni: </strong>[[*{annotation}]]</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <a class="button button-edit" th:href="@{|/edit/*{id}|}">Modifica</a>
                         <a class="button button-delete" th:href="@{|/delete/*{id}|}">Elimina</a>
@@ -42,6 +68,8 @@
                 </tr>
             </tbody>
         </table>
+
+        
 
 
 
