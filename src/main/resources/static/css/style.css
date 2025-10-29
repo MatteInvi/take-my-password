@@ -169,3 +169,10 @@ h1 {
 #button-section {
   width: 350px;
 }
+
+#form-password{
+  width: 20%;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
