@@ -9,14 +9,14 @@
     <nav th:insert="~{fragments/navbar :: navbar}"></nav>
     <main class="container">
         <h1 class="text-center text-white title">Ricerca dati di accesso</h1>
-        <p th:if="${success}"><strong style="color:green;">[[${success}]]</strong></p>
+        <p style="text-align: center;" th:if="${success}"><strong style="color:green;">[[${success}]]</strong></p>
         <div id="top-bar-container">
             <div id="top-bar">
-                <a class="button button-add" th:href="@{|/archive/create|}">Aggiungi
+                <a id="add-date-button" class="button button-add" th:href="@{|/archive/create|}">Aggiungi
                     Dato</a>
                 <form class="form" id="search-form" method="GET">
-                    <input class="form-control" type="text" name="query" id="search">
-                    <button class="button button-search" type="submit">Cerca</button>
+                    <input  class="form-control" type="text" name="query" id="search-date-input">
+                    <button id="button-date-search" class="button button-search" type="submit">Cerca</button>
                 </form>
             </div>
 
@@ -40,6 +40,7 @@
                         <td id="button-section">
                             <button class="button button-details" data-bs-toggle="modal"
                                 th:data-bs-target="'#details-'+*{id}">Dettagli</button>
+
                             <!-- Details Modal -->
                             <div class="modal fade" th:id="'details-'+*{id}" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -52,8 +53,10 @@
                                         </div>
                                         <div class="modal-body">
                                             <p><strong>Piattaforma: </strong>[[*{platform}]]</p>
-                                            <p><strong>Utente: </strong>[[*{username}]]</p>
-                                            <p><strong>Password: </strong>[[*{password}]]</p>
+                                            
+                                            <p><strong>Utente: </strong><span>[[*{username}]]</span></p>
+                                         
+                                            <p><strong>Password: </strong><span>[[*{password}]]</span></p>
                                             <p><strong>Annotazioni: </strong>[[*{annotation}]]</p>
                                         </div>
                                         <div class="modal-footer">

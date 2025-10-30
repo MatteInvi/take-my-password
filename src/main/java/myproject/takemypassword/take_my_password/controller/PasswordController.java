@@ -19,7 +19,7 @@ public class PasswordController {
     @GetMapping
     public String home(){
 
-        return "password/show";
+        return "password/home";
     }
 
 

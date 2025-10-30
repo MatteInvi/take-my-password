@@ -9,11 +9,7 @@ body {
   background-color: #1a1d23;
 }
 
-.container {
-  width: 80%;
-  margin: 20px auto;
-  height: 100vh;
-}
+
 
 .title {
   padding: 10px 0px 10px 0px;
@@ -45,6 +41,7 @@ h1 {
 .container {
   background-color: #4e46e534;
   color: white;
+  min-height: 100vh;
 }
 
 /* Classe generica */
@@ -175,4 +172,49 @@ h1 {
   position: absolute;
   left: 50%;
   transform: translate(-50%);
+}
+
+#copy-button{
+  display: inline;
+}
+
+#p-password{
+  display: inline;
+}
+
+#pwd:hover{
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+#message{
+  display: none;
+}
+
+@media screen and (max-width:1140px) {
+  #top-bar{
+    display: block;
+  }
+  #add-date-button{
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  
+}
+@media screen and (max-width:768px){
+  #button-date-search{
+    display: block;
+    width: 100%;
+  }
+  #search-date-input{
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+
+  }
+  #search-form{
+    display: block;
+  }
 }

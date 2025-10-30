@@ -13,7 +13,7 @@
         <section id="form-password">
             <form action="/password/generate" method="get">
                 <label class="form-label" for="length">Lunghezza:</label>
-                <input class="form-control" type="number" id="length" name="length" value="0" min="1">
+                <input class="form-control" type="number" id="length" name="length" value="8" min="1">
                 <button class="button button-search mt-2" type="submit">Genera</button>
                 </form>
 
@@ -27,7 +27,7 @@
         </section>
 
     </main>
-
+  <th:block th:insert="~{fragments/footer :: script}"></th:block>
 </body>
 
 </html>

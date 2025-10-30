@@ -22,7 +22,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String search(Model model, @RequestParam(required = false) String query) {
-        List<DatoAccesso> datiAccesso = new ArrayList();
+        List<DatoAccesso> datiAccesso = new ArrayList<DatoAccesso>();
         if (query != null && !query.isEmpty()) {
             datiAccesso = datiRepository.findByUsernameContainingIgnoreCase(query);
         }
