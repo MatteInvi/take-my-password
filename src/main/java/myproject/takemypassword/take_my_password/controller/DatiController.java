@@ -1,7 +1,7 @@
 package myproject.takemypassword.take_my_password.controller;
 
-
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
@@ -27,35 +27,32 @@ public class DatiController {
     DatiRepository datiRepository;
 
     @GetMapping
-    public String home(Model model) {
+    public String search(Model model, @RequestParam(required = false) String query) {
+        List<DatoAccesso> datiAccesso = new ArrayList<DatoAccesso>();
+        if (query != null && !query.isEmpty()) {
+            datiAccesso = datiRepository.findByUsernameContainingIgnoreCase(query);
+        }
+        model.addAttribute("dati", datiAccesso);
 
         return "archivio/home";
     }
 
-    @GetMapping("/show/{id}")
-    public String show(Model model, @PathVariable Integer id) {
-
-        Optional<DatoAccesso> datoOptional = datiRepository.findById(id);
-
-        model.addAttribute("dato", datoOptional.get());
-        return "archivio/show";
-    }
-
     @GetMapping("/create")
-    public String create(Model model){
+    public String create(Model model) {
         DatoAccesso dato = new DatoAccesso();
         model.addAttribute("dato", dato);
         return "archivio/create";
     }
 
     @PostMapping("/create")
-    public String save(@Valid @ModelAttribute ("dato") DatoAccesso datoForm, BindingResult bindingResult,RedirectAttributes redirectAttributes)  {
+    public String save(@Valid @ModelAttribute("dato") DatoAccesso datoForm, BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "archivio/create";
         }
         datiRepository.save(datoForm);
         redirectAttributes.addFlashAttribute("success", "Dato salvato con successo!");
-        return "redirect:/";
+        return "redirect:/archive";
     }
 
     @GetMapping("/edit/{id}")
@@ -67,13 +64,14 @@ public class DatiController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(@Valid @ModelAttribute ("dato") DatoAccesso datoForm, BindingResult bindingResult,RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()){
+    public String update(@Valid @ModelAttribute("dato") DatoAccesso datoForm, BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
             return "archivio/edit";
         }
         datiRepository.save(datoForm);
         redirectAttributes.addFlashAttribute("success", "Dato modificato con successo!");
-        return "redirect:/";
+        return "redirect:/archive";
     }
 
     @PostMapping("delete/{id}")

@@ -1,8 +1,8 @@
 
 // Copia password generata al click
-const testo= document.getElementById("pwd");
+const testo = document.getElementById("pwd");
 const messaggio = document.getElementById("message");
-
+if (testo){
 testo.addEventListener("click", () => {
 
       // Copia il contenuto del paragrafo
@@ -14,3 +14,4 @@ testo.addEventListener("click", () => {
           console.error("Errore durante la copia: " + err);
         });
     });
+  }

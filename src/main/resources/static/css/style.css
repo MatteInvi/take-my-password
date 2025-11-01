@@ -158,6 +158,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
+
 #top-bar-container {
   display: flex;
   justify-content: center;
@@ -187,9 +188,6 @@ h1 {
   color: rgba(255, 255, 255, 0.6);
 }
 
-#message{
-  display: none;
-}
 
 @media screen and (max-width:1140px) {
   #top-bar{
