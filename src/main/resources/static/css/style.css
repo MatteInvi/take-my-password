@@ -1,3 +1,4 @@
+/* Generics */
 * {
   box-sizing: border-box;
   padding: 0;
@@ -8,8 +9,6 @@
 body {
   background-color: #1a1d23;
 }
-
-
 
 .title {
   padding: 10px 0px 10px 0px;
@@ -28,7 +27,7 @@ h1 {
 .form {
   display: flex;
 }
-
+/* Tabella */
 #tabella-ricerca {
   display: flex;
   justify-content: center;
@@ -37,13 +36,13 @@ h1 {
 .table {
   width: 50%;
 }
-
+/* Contenitiore */
 .container {
   background-color: #4e46e534;
   color: white;
   min-height: 100vh;
 }
-
+/* Sezione bottoni */
 /* Classe generica */
 .button {
   display: inline;
@@ -116,6 +115,7 @@ h1 {
   box-shadow: 0 6px 16px rgba(0, 194, 168, 0.7);
 }
 
+/* Barra di navigazione */
 #navbar {
   height: 50px;
   background-color: black;
@@ -146,12 +146,7 @@ h1 {
   border-radius: 10px;
 }
 
-.input {
-  height: 28px;
-  border-radius: 10px;
-  border: none;
-}
-
+/* Batta superiore home ricerca dato */
 #top-bar {
   width: 50%;
   display: flex;
@@ -164,55 +159,52 @@ h1 {
   justify-content: center;
 }
 
+/* Sezione bottoni tabella dati */
 #button-section {
   width: 350px;
 }
 
-#form-password{
+/* Form di generazione password */
+#form-password {
   width: 20%;
   position: absolute;
   left: 50%;
   transform: translate(-50%);
 }
 
-#copy-button{
+/* Sezione password generata */
+#p-password {
   display: inline;
 }
 
-#p-password{
-  display: inline;
-}
-
-#pwd:hover{
+#pwd:hover {
   cursor: pointer;
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* Sezione responsive  */
 
-@media screen and (max-width:1140px) {
-  #top-bar{
+@media screen and (max-width: 1140px) {
+  #top-bar {
     display: block;
   }
-  #add-date-button{
+  #add-date-button {
     display: block;
     width: 100%;
     margin-bottom: 10px;
   }
-
-  
 }
-@media screen and (max-width:768px){
-  #button-date-search{
+@media screen and (max-width: 768px) {
+  #button-date-search {
     display: block;
     width: 100%;
   }
-  #search-date-input{
+  #search-date-input {
     display: block;
     width: 100%;
     margin-bottom: 5px;
-
   }
-  #search-form{
+  #search-form {
     display: block;
   }
 }
