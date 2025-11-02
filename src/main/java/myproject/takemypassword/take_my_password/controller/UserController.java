@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +40,7 @@ public class UserController {
     public String show(@PathVariable Integer id, Model model) {
         Optional<User> utente = userRepository.findById(id);
         model.addAttribute("utente", utente.get());
-        return "utente/show";
+        return "utenti/show";
     }
 
     @GetMapping("/register")
@@ -73,5 +75,59 @@ public class UserController {
         userRepository.save(formUser);
         redirectAttributes.addFlashAttribute("success", "Registrazione avvenuta con successo!");
         return "redirect:/";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model, Authentication authentication) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {            
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if (authority.getAuthority().equals("ADMIN")
+                        || userOptional.get().getEmail().equals(authentication.getName())) {
+                    model.addAttribute("utente", userOptional.get());
+                    return "utenti/edit";
+                }
+
+            }
+        } else if(!userOptional.isPresent()) {
+            model.addAttribute("error", "Utente non trovato!");
+            return "pages/error";
+        }
+
+        model.addAttribute("error", "Non sei autorizzato a vedere questa pagina!");
+        return "pages/error";
+
+    }
+
+    @PostMapping("/edit/{id}")
+    public String update(@Valid @ModelAttribute("utente") User formUser, BindingResult bindingResult, @PathVariable Integer id, RedirectAttributes redirectAttributes, Authentication authentication, Model model){
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {            
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                if (authority.getAuthority().equals("ADMIN")
+                        || userOptional.get().getEmail().equals(authentication.getName())) {
+                    if (bindingResult.hasErrors()){
+                        return "utenti/edit";
+                    }
+                    formUser.setRoles(userOptional.get().getRoles());
+                    formUser.setPassword(passwordEncoder.encode(userOptional.get().getPassword()));
+                    userRepository.save(formUser);
+
+                    redirectAttributes.addFlashAttribute("success", "Dati modificati con successo!");
+                    return "redirect:/user/show/" + userOptional.get().getId() ;
+                }
+
+            }
+        } else if(!userOptional.isPresent()) {
+            model.addAttribute("error", "Utente non trovato!");
+            return "pages/error";
+        }
+
+        model.addAttribute("error", "Non sei autorizzato a vedere questa pagina!");
+        return "pages/error";
+
+
+        
+
     }
 }

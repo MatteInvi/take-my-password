@@ -19,5 +19,11 @@ public class HomeController {
         return "pages/homepage";
     }
 
+        @GetMapping("/login")
+    public String login() {
+
+        return "pages/login";
+    }
+
 
 }

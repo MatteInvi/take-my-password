@@ -2,8 +2,9 @@ package myproject.takemypassword.take_my_password.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,17 +16,25 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-        
-            .authorizeHttpRequests(requests -> requests
-            .requestMatchers("/", "/password", "/css/**", "/js/**", "/user/register").permitAll()
-            .requestMatchers("/archive", "/user/*").hasAnyAuthority("ADMIN", "USER")
-            )
-            .formLogin(Customizer.withDefaults());
 
-            return http.build();
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/", "/password", "/css/**", "/js/**", "/user/register", "/login").permitAll()
+                        .requestMatchers("/archive/**", "/user/edit/*", "/user/show/*").hasAnyAuthority("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/user/edit/*", "/user/show/*", "/user/delete/*")
+                        .hasAnyAuthority("ADMIN", "USER"))
+
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll());
+
+        return http.build();
     }
 
     @Bean

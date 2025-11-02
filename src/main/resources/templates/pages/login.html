@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/header :: head('Login')}">
+
+<body class="">
+
+    <section th:insert="~{fragments/navbar :: navbar}"></section>
+    <main class="container w-50">
+        <div class="d-flex justify-content-center py-3 mt-3">
+            <form class="col" th:action="@{/login}" method="POST">
+                <h2 class="text-center">Accedi</h2>
+                <div class="col">
+                    <label class="form-label" for="username">Email:</label>
+                    <input type="email" name="username" id="username" class="form-control">
+                </div>
+                <div class="col">
+                    <label class="form-label" for="password">Password:</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+                <div th:if="${param.error}" class="text-danger mt-1">Credenziali non valide!</div>
+                <div th:if="${param.logout}" class="text-success mt-1">Logout effettuato con successo!</div>
+                <div th:if="${confirm}" class="text-success mt-1">Registrazione confermata!</div>
+                <a th:href="@{/user/passwordRecovery}">Recupera password</a>
+                <div class="col mt-3">
+                    <button type="submit" class="btn btn-primary col-12">Login</button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+    <!-- Script fragment -->
+    <section th:insert="~{fragments/footer :: script}"></section>
+
+</body>
+
+
+
+</html>

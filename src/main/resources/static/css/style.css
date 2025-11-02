@@ -199,6 +199,14 @@ h1 {
   color: rgba(255, 255, 255, 0.6);
 }
 
+#info-utente{
+  text-align: center;
+}
+
+#info-utente h3{
+  display: inline;
+}
+
 /* Sezione responsive  */
 
 @media screen and (max-width: 1140px) {

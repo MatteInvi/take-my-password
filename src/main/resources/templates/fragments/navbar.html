@@ -5,17 +5,23 @@
             <li class="nav-item"><a th:href="@{/archive}">Archivio</a></li>
             <li class="nav-item"><a th:href="@{|/password|}">Generatore PW</a></li>
         </ul>
-        <div>
 
-            <a sec:authorize="isAnonymous()" class="button-login-logout" th:href="@{/login}">Login</a>
-            <a sec:authorize="isAnonymous()" class="button-login-logout" th:href="@{/user/register}">Registrati</a>
 
-            <ul sec:authorize="isAuthenticated()" class="nav">
-                <li class="nav-item"><a href="">Info utente</a></li>
+        <section  sec:authorize="isAnonymous()">
+            <a class="button-login-logout" th:href="@{/login}">Login</a>
+            <a  class="button-login-logout" th:href="@{/user/register}">Registrati</a>
+        </section>
+
+        <section sec:authorize="isAuthenticated()">
+            <ul  class="nav">
+                <li class="nav-item"><a th:href="@{|/user/show/${userLogged.id}|}">Info utente</a></li>
+                <form th:action="@{/logout}" method="post">
+                    <button class="btn btn-primary" type="submit">Logout</button>
+                </form>
             </ul>
-            <a sec:authorize="isAuthenticated()" class="btn btn-primary" th:href="@{/logout}">Logout</a>
 
-        </div>
+        </section>
+
 
     </div>
 </th:block>
