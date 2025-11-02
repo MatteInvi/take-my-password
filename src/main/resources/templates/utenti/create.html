@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xlms:th="www.thymeleaf.org" lang="en">
+<th:block th:insert="~{fragments/header :: head('Registrazione')}"></th:block>
+
+<body>
+    <nav th:insert="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="container">
+        <h1>Registrazione</h1>
+        <div class="d-flex justify-content-center ">
+            <form th:action="@{/user/register}" th:object="${utente}" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label" for="name">Nome:</label>
+                    <input class="form-control" type="text" id="name" th:field="*{name}" th:errorClass="is-invalid">
+
+                    <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback">
+                        <ul>
+                            <li th:each="error : ${#fields.errors('name')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="surname">Cognome:</label>
+                    <input class="form-control" type="text" id="surname" th:field="*{surname}"
+                        th:errorClass="is-invalid">
+
+                    <div th:if="${#fields.hasErrors('surname')}" class="invalid-feedback">
+                        <ul>
+                            <li th:each="error : ${#fields.errors('surname')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="email">Email:</label>
+                    <input class="form-control" type="text" id="email" th:field="*{email}" th:errorClass="is-invalid">
+
+                    <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback">
+                        <ul>
+                            <li th:each="error : ${#fields.errors('email')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="password">Password:</label>
+                    <input class="form-control" type="text" id="password" th:field="*{password}"
+                        th:errorClass="is-invalid">
+
+                    <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback">
+                        <ul>
+                            <li th:each="error : ${#fields.errors('password')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="button button-search" type="submit">Crea</button>
+
+
+            </form>
+        </div>
+    </main>
+    <th:block th:insert="~{fragments/footer :: script}"></th:block>
+</body>
+
+</html>

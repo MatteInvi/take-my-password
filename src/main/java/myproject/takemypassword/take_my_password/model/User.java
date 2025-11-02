@@ -22,16 +22,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotBlank (message = "Inserire il nome!")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Inserire il cognome!")
     private String surname;
 
-    @NotBlank
+    @NotBlank(message = "Inserire la mail!")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Inserire la password!")
     private String password;
 
     @ManyToAny(fetch = FetchType.EAGER)

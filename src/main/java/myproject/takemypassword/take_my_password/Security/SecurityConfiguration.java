@@ -20,8 +20,8 @@ public class SecurityConfiguration {
         http
         
             .authorizeHttpRequests(requests -> requests
-            .requestMatchers("/", "/password", "/css/**", "/js/**").permitAll()
-            .requestMatchers("/archive").hasAnyAuthority("ADMIN", "USER")
+            .requestMatchers("/", "/password", "/css/**", "/js/**", "/user/register").permitAll()
+            .requestMatchers("/archive", "/user/*").hasAnyAuthority("ADMIN", "USER")
             )
             .formLogin(Customizer.withDefaults());
 

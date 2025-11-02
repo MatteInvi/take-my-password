@@ -8,4 +8,5 @@ import myproject.takemypassword.take_my_password.model.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
 }
