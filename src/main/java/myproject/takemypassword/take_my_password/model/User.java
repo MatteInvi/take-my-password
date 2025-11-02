@@ -1,8 +1,8 @@
 package myproject.takemypassword.take_my_password.model;
 
+import java.util.List;
 import java.util.Set;
 
-import org.hibernate.annotations.ManyToAny;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
@@ -34,11 +36,27 @@ public class User {
     @NotBlank(message = "Inserire la password!")
     private String password;
 
-    @ManyToAny(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    @OneToMany (mappedBy = "user")
+    private List<DatoAccesso> datiAccesso;
+
+
+
     // Getter and setter
+
+
+    public List<DatoAccesso> getDatiAccesso() {
+        return this.datiAccesso;
+    }
+
+    public void setDatiAccesso(List<DatoAccesso> datiAccesso) {
+        this.datiAccesso = datiAccesso;
+    }
+
+
     public Set<Role> getRoles() {
         return this.roles;
     }
