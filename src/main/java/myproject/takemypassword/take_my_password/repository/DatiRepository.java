@@ -9,5 +9,8 @@ import myproject.takemypassword.take_my_password.model.User;
 
 public interface DatiRepository extends JpaRepository<DatoAccesso, Integer> {
     public List<DatoAccesso> findByUsernameContainingIgnoreCase(String username);
+
     public List<DatoAccesso> findByUserAndPlatformContainingIgnoreCase(User user, String usernameString);
+
+    public List<DatoAccesso> findByUser(User user);
 }

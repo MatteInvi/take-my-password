@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import myproject.takemypassword.take_my_password.model.User;
 import myproject.takemypassword.take_my_password.repository.UserRepository;
 
+@Service
 public class DatabaseUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -17,13 +19,13 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       Optional<User> user = userRepository.findByEmail(username);
+        Optional<User> user = userRepository.findByEmail(username);
 
-       if (user.isPresent()){
-        return new DatabaseUserDetails(user.get());
-       } else{
-        throw new UsernameNotFoundException("Utente non trovato!");
-       }
+        if (user.isPresent()) {
+            return new DatabaseUserDetails(user.get());
+        } else {
+            throw new UsernameNotFoundException("Utente non trovato!");
+        }
     }
-    
+
 }

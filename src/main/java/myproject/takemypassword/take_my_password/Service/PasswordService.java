@@ -16,6 +16,8 @@ public class PasswordService {
     public String generatePassword(int length) {
         if (length < 8) {
             throw new IllegalArgumentException("La lunghezza deve essere di almeno 8 caratteri");
+        } else if (length > 20) {
+            throw new IllegalArgumentException("La lunghezza deve essere di massimo 20 caratteri");
         }
 
         StringBuilder password = new StringBuilder(length);
