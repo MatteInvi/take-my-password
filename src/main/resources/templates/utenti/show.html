@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head th:insert="~{fragments/header :: head('Info utente')}">
 
 </head>
+
 <body>
     <nav th:insert="~{fragments/navbar :: navbar}"></nav>
     <main class="container">
-      
+
 
         <h1>Info utente</h1>
         <p style="font-weight: 700; color: green; text-align: center;" th:text="${success}"></p>
         <section id="info-utente" th:object="${utente}">
-            
+
             <h3>[[*{name}]]</h3>
             <h3>[[*{surname}]]</h3>
             <h4>[[*{email}]]</h4>
@@ -19,8 +21,11 @@
                 <a class="button button-edit" th:href="@{|/user/edit/*{id}|}">Modifica</a>
             </section>
         </section>
-     
+
     </main>
-    
+
+    <!-- Script fragment -->
+    <section th:insert="~{fragments/footer :: script}"></section>
 </body>
+
 </html>

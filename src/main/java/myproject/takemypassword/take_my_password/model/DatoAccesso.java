@@ -18,7 +18,7 @@ public class DatoAccesso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
- 
+
     @NotBlank(message = "Inserisci la piattaforma")
     private String platform;
 
@@ -38,7 +38,6 @@ public class DatoAccesso {
 
     // Getter e Setter
 
-
     public User getUser() {
         return this.user;
     }
@@ -47,7 +46,6 @@ public class DatoAccesso {
         this.user = user;
     }
 
-
     public String getPlatform() {
         return this.platform;
     }
@@ -55,7 +53,6 @@ public class DatoAccesso {
     public void setPlatform(String platform) {
         this.platform = platform;
     }
-
 
     public Integer getId() {
         return this.id;

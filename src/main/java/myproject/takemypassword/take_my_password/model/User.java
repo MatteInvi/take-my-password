@@ -46,8 +46,7 @@ public class User {
 
 
     // Getter and setter
-
-
+    
     public List<DatoAccesso> getDatiAccesso() {
         return this.datiAccesso;
     }

@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head th:insert="~{fragments/header :: head('Homepage')}">
 
 </head>
+
 <body>
     <nav th:insert="~{fragments/navbar :: navbar}"></nav>
     <main class="container">
         <p><strong style="text-align: center; color: green;" th:text="${success}"></strong></p>
 
         <h1>Take my Password</h1>
-        <p style="font-weight: 700;" class="text-center">Piattaforma pensata per salvare in modo semplice e veloce i dati di accesso alle piattaforme digitali</p>
+        <p style="font-weight: 700;" class="text-center">Piattaforma pensata per salvare in modo semplice e veloce i
+            dati di accesso alle piattaforme digitali</p>
     </main>
-    
+
+    <!-- Script fragment -->
+    <section th:insert="~{fragments/footer :: script}"></section>
 </body>
+
 </html>

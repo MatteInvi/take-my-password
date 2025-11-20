@@ -46,36 +46,38 @@ public class UserController {
     @GetMapping("/register")
     public String register(Model model) {
 
-        User utente = new User();
-        model.addAttribute("utente", utente);
-        return "utenti/create";
+        // User utente = new User();
+        // model.addAttribute("utente", utente);
+        // return "utenti/create";
+        model.addAttribute("error", "Al momento non è possibile registrarsi");
+        return "pages/error";
     }
 
-    @PostMapping("/register")
-    public String save(@Valid @ModelAttribute("utente") User formUser, BindingResult bindingResult,
-            RedirectAttributes redirectAttributes) {
-        if (userRepository.existsByEmail(formUser.getEmail())) {
-            bindingResult.rejectValue("email", "error.user", "Email già registrata!");
-            return "utenti/create";
-        }
+    // @PostMapping("/register")
+    // public String save(@Valid @ModelAttribute("utente") User formUser, BindingResult bindingResult,
+    //         RedirectAttributes redirectAttributes) {
+    //     if (userRepository.existsByEmail(formUser.getEmail())) {
+    //         bindingResult.rejectValue("email", "error.user", "Email già registrata!");
+    //         return "utenti/create";
+    //     }
 
-        if (bindingResult.hasErrors()) {
-            return "utenti/create";
-        }
+    //     if (bindingResult.hasErrors()) {
+    //         return "utenti/create";
+    //     }
 
-        Role roleUser = new Role();
+    //     Role roleUser = new Role();
 
-        for (Role role : roleRepository.findAll()) {
-            if (role.getName().equals("USER")) {
-                roleUser = role;
-            }
-        }
-        formUser.setRoles(Set.of(roleUser));
-        formUser.setPassword(passwordEncoder.encode(formUser.getPassword()));
-        userRepository.save(formUser);
-        redirectAttributes.addFlashAttribute("success", "Registrazione avvenuta con successo!");
-        return "redirect:/";
-    }
+    //     for (Role role : roleRepository.findAll()) {
+    //         if (role.getName().equals("USER")) {
+    //             roleUser = role;
+    //         }
+    //     }
+    //     formUser.setRoles(Set.of(roleUser));
+    //     formUser.setPassword(passwordEncoder.encode(formUser.getPassword()));
+    //     userRepository.save(formUser);
+    //     redirectAttributes.addFlashAttribute("success", "Registrazione avvenuta con successo!");
+    //     return "redirect:/";
+    // }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model, Authentication authentication) {
