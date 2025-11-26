@@ -22,7 +22,7 @@
 
         </div>
         <div id="tabella-ricerca">
-            <table th:if="${dati} and ${dati.size > 0} " class="table mt-2">
+            <table id="table_index"   th:if="${dati} and ${dati.size > 0} ">
                 <thead>
                     <tr>
 
@@ -44,7 +44,7 @@
                             <!-- Details Modal -->
                             <div class="modal fade" th:id="'details-'+*{id}" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div id="card-details" class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="">Dettagli</h1>
@@ -105,6 +105,17 @@
                 </tbody>
             </table>
         </div>
+
+        <section id="page_scroll">
+            <a th:if="${currentPage > 0}" class="button button-details" th:href="@{/archive(page=${currentPage - 1}, query=${query})}">Precedente</a>
+
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <a class="button button-details" th:href="@{/archive(page=${i}, query=${query})}" th:text="${i + 1}"></a>
+            </span>
+
+            <a th:if="${currentPage < totalPages - 1}" class="button button-details" th:href="@{/archive(page=${currentPage + 1}, query=${query})}">Successiva</a>
+
+        </section>
 
 
 

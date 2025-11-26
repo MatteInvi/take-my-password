@@ -1,10 +1,11 @@
 package myproject.takemypassword.take_my_password.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -40,13 +41,21 @@ public class DatiController {
     UserRepository userRepository;
 
     @GetMapping
-    public String search(Model model, @RequestParam(required = false) String query, Authentication authentication) {
-        List<DatoAccesso> datiAccesso = new ArrayList<DatoAccesso>();
+    public String index(Model model, @RequestParam(required = false) String query,@RequestParam (defaultValue = "0") int page, Authentication authentication) {
         Optional<User> userLogged = userRepository.findByEmail(authentication.getName());
+        Page<DatoAccesso> datiAccesso;
 
         if (query != null && !query.isEmpty()) {
-            datiAccesso = datiRepository.findByUserAndPlatformContainingIgnoreCase(userLogged.get(), query);
+             datiAccesso = datiRepository.findByUserAndPlatformContainingIgnoreCase(userLogged.get(), query, org.springframework.data.domain.PageRequest.of(page, 10)); // 10 dati per pagina
+        } else {
+             datiAccesso = datiRepository.findByUser(userLogged.get(), org.springframework.data.domain.PageRequest.of(page, 10)); // 10 dati per pagina
+                
         }
+
+        model.addAttribute("pagina", datiAccesso);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", datiAccesso.getTotalPages());
+        model.addAttribute("query", query);
         model.addAttribute("dati", datiAccesso);
 
         return "archivio/home";

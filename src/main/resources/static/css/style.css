@@ -19,7 +19,7 @@ body {
 }
 
 h1 {
- color: rgba(255, 255, 0, 0.582);
+  color: rgba(255, 255, 0, 0.582);
   text-align: center;
   margin: 10px 0px;
 }
@@ -38,7 +38,6 @@ h1 {
 }
 /* Contenitiore */
 .container {
-
   color: white;
   min-height: 100vh;
 }
@@ -92,8 +91,8 @@ h1 {
   box-shadow: 0 6px 16px rgba(230, 57, 70, 0.7);
 }
 
-.modal-content{
-background-color:  rgb(202, 81, 0);
+.modal-content {
+  background-color: rgb(202, 81, 0);
 }
 
 /* Pulsante Aggiungi dato */
@@ -119,7 +118,7 @@ background-color:  rgb(202, 81, 0);
 }
 
 /* Pulsante Login */
-.button-login-logout{
+.button-login-logout {
   background: linear-gradient(145deg, #2979ff, #4da1ff);
   color: white;
   border-radius: 8px;
@@ -134,10 +133,10 @@ background-color:  rgb(202, 81, 0);
 }
 
 /* Barra di navigazione */
-.navbar{
+.navbar {
   background-color: orange;
 }
-.nav-link{
+.nav-link {
   border-radius: 10px;
 }
 
@@ -182,12 +181,162 @@ background-color:  rgb(202, 81, 0);
   color: rgba(255, 255, 255, 0.6);
 }
 
-#info-utente{
+#info-utente {
   text-align: center;
 }
 
-#info-utente h3{
+#info-utente h3 {
   display: inline;
+}
+
+#page_scroll {
+  text-align: center;
+  margin: 20px 0px;
+}
+
+/* Stile Principale della Tabella  */
+#table_index {
+  width: 60%;
+  margin: 40px auto;
+  border-collapse: collapse;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #2c2c2c;
+  color: #f0f0f0;
+}
+
+/* Intestazione della Tabella (thead)*/
+
+#table_index thead {
+  background: linear-gradient(to right, #e87e04, #ff5722);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#table_index th {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 2px solid #5a5a5a;
+}
+
+/*  Corpo della Tabella (tbody) e Righe  */
+
+#table_index tbody tr {
+  border-bottom: 1px solid #444;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Righe con sfondo alternato*/
+#table_index tbody tr:nth-child(even) {
+  background-color: #383838;
+}
+
+/*  Celle della Tabella (td) */
+
+#table_index td {
+  padding: 12px 15px;
+}
+
+/* Stile per l'ultima riga */
+#table_index tr:last-child {
+  border-bottom: none;
+}
+
+/*  1. Sfondo del Dialogo Modale (card-details)  */
+
+#card-details.modal-dialog {
+  max-width: 450px;
+  margin: 1.75rem auto;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/*  Contenuto Principale della Modale (modal-content)  */
+
+.modal-content {
+  background-color: #333;
+  color: #f0f0f0;
+  border: 1px solid rgba(255, 102, 0, 0.5);
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+}
+
+/*  Intestazione della Modale --- */
+.modal-header {
+  background: #ff5722;
+  border-bottom: none;
+  padding: 15px 20px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.modal-header .modal-title {
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Pulsante di chiusura  */
+.modal-header .btn-close {
+  filter: invert(1);
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.modal-header .btn-close:hover {
+  opacity: 1;
+}
+
+/*  Corpo della Modale (modal-body) - Dettagli */
+
+.modal-body {
+  padding: 25px 20px;
+  line-height: 1.8;
+}
+
+.modal-body p {
+  margin-bottom: 12px;
+}
+
+/* Stile per i valori dei dettagli (Piattaforma, Utente, ecc.) */
+.modal-body p span {
+  font-weight: normal;
+  color: #ffb84d;
+}
+
+/*  Piè di Pagina della Modale (modal-footer) */
+.modal-footer {
+  border-top: 1px solid #444;
+  background-color: #3a3a3a;
+  padding: 15px 20px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+/* Stile per il bottone di chiusura */
+.modal-footer .btn-secondary {
+  background-color: #555;
+  border-color: #555;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #ff5722;
+  border-color: #ff5722;
+}
+
+/* --- Animazione di Fade In per la Modale --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Sezione responsive  */
@@ -218,8 +367,7 @@ background-color:  rgb(202, 81, 0);
 }
 
 @media screen and (max-width: 1000px) {
-  .nav-link{
+  .nav-link {
     padding: 10px;
   }
-  
 }
