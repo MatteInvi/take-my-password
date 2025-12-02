@@ -56,8 +56,9 @@
 
                                             <p><strong>Utente: </strong><span>[[*{username}]]</span></p>
 
-                                            <p><strong>Password: </strong><span>[[*{password}]]</span></p>
+                                            <p><strong>Password: </strong><span class="password" th:id="'passwordToCopy-' + *{id}">[[*{password}]]</span></p>
                                             <p><strong>Annotazioni: </strong>[[*{annotation}]]</p>
+                                            <section id="messageCopied"></section>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
