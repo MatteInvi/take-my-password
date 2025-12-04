@@ -3,7 +3,7 @@ package myproject.takemypassword.take_my_password.model;
 import java.util.List;
 import java.util.Set;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
@@ -24,7 +25,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank (message = "Inserire il nome!")
+    @NotBlank(message = "Inserire il nome!")
     private String name;
 
     @NotBlank(message = "Inserire il cognome!")
@@ -36,17 +37,40 @@ public class User {
     @NotBlank(message = "Inserire la password!")
     private String password;
 
+    private boolean verified = false;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @OneToMany (mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private List<DatoAccesso> datiAccesso;
 
-
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AuthToken authToken;
 
     // Getter and setter
-    
+
+    public AuthToken getAuthToken() {
+        return this.authToken;
+    }
+
+    public void setAuthToken(AuthToken authToken) {
+        this.authToken = authToken;
+    }
+
+    public boolean isVerified() {
+        return this.verified;
+    }
+
+    public boolean getVerified() {
+        return this.verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
     public List<DatoAccesso> getDatiAccesso() {
         return this.datiAccesso;
     }
@@ -54,7 +78,6 @@ public class User {
     public void setDatiAccesso(List<DatoAccesso> datiAccesso) {
         this.datiAccesso = datiAccesso;
     }
-
 
     public Set<Role> getRoles() {
         return this.roles;

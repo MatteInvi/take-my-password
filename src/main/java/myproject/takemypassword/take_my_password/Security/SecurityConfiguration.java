@@ -44,7 +44,7 @@ public class SecurityConfiguration {
 
                         // Endpoints pubblici
                         .requestMatchers(
-                                "/api/auth/login",
+                                "/api/auth/*",
                                 "/user/register",
                                 "/css/**",
                                 "/js/**",
