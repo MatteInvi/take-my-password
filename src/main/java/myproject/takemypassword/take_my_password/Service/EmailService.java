@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.mail.internet.MimeMessage;
 import myproject.takemypassword.take_my_password.model.AuthToken;
@@ -22,10 +21,7 @@ public class EmailService {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            String confirmationUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/auth/confirm-email")
-                    .queryParam("token", token.getToken())
-                    .toUriString();
+            String confirmationUrl = "http://localhost:3000/confirm?token=" + token.getToken();
 
             helper.setTo(user.getEmail());
             helper.setSubject("Conferma la tua email");

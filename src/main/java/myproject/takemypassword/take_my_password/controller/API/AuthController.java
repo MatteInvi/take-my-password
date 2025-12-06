@@ -128,7 +128,7 @@ public class AuthController {
         return ResponseEntity.ok("Registrazione completata con successo");
     }
 
-     // Sezione di conferma registrazione
+    // Sezione di conferma registrazione
     @GetMapping("/confirm-email")
     public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
 
