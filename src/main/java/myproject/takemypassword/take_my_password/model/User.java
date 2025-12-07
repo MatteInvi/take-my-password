@@ -49,7 +49,20 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private AuthToken authToken;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ResetToken resetToken;
+
     // Getter and setter
+
+
+    public ResetToken getResetToken() {
+        return this.resetToken;
+    }
+
+    public void setResetToken(ResetToken resetToken) {
+        this.resetToken = resetToken;
+    }
+
 
     public AuthToken getAuthToken() {
         return this.authToken;

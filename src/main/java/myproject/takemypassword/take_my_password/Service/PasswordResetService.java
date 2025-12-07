@@ -1,0 +1,45 @@
+package myproject.takemypassword.take_my_password.Service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import myproject.takemypassword.take_my_password.model.ResetToken;
+import myproject.takemypassword.take_my_password.model.User;
+import myproject.takemypassword.take_my_password.repository.ResetTokenRepository;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Service
+public class PasswordResetService {
+
+@Autowired
+ResetTokenRepository resetTokenRepository;
+
+    @Transactional
+    public ResetToken generateResetToken(User user) {
+
+
+        // 1️⃣ Elimina eventuale token precedente
+        int deleteCount = 0;
+        try{
+
+            deleteCount = resetTokenRepository.deleteByUser(user);
+            System.out.println("Eliminati " + deleteCount + " token precedenti per l'utente: " + user.getEmail());
+        } catch (Exception e){
+            System.out.println("Nessun token precedente da eliminare... Errore:"+ e);
+        }
+
+
+        // 2️⃣ Genera un nuovo token
+        String token = UUID.randomUUID().toString();
+        ResetToken resetToken = new ResetToken();
+        resetToken.setUser(user);
+        resetToken.setToken(token);
+        resetToken.setExpiryDate(LocalDateTime.now().plusHours(1));
+
+        // 3️⃣ Salva e ritorna
+        return resetTokenRepository.save(resetToken);
+    }
+}

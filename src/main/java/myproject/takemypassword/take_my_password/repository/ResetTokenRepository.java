@@ -8,15 +8,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import myproject.takemypassword.take_my_password.model.AuthToken;
+import myproject.takemypassword.take_my_password.model.ResetToken;
 import myproject.takemypassword.take_my_password.model.User;
 
-public interface AuthTokenRepository extends JpaRepository<AuthToken, Integer> {
+public interface ResetTokenRepository extends JpaRepository<ResetToken, Integer> {
     
-     public Optional<AuthToken> findByToken(String token);
+     public Optional<ResetToken> findByToken(String token);
+     public Optional<ResetToken> findByUser(User user);
 
-     @Modifying
+
+
+
+
+@Modifying
     @Transactional
-    @Query("DELETE FROM AuthToken t WHERE t.user = :user")
+    // 💡 Usa JPQL (Java Persistence Query Language) per l'eliminazione diretta
+    // Questo è più affidabile per le operazioni di DELETE/UPDATE
+    @Query("DELETE FROM ResetToken t WHERE t.user = :user")
     int deleteByUser(@Param("user") User user);
 }

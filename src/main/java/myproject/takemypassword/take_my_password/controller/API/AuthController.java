@@ -21,16 +21,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import jakarta.validation.Valid;
 import myproject.takemypassword.take_my_password.DTO.AuthResponse;
 import myproject.takemypassword.take_my_password.DTO.LoginRequest;
+import myproject.takemypassword.take_my_password.DTO.ResetPasswordDTO;
 import myproject.takemypassword.take_my_password.Service.EmailService;
 import myproject.takemypassword.take_my_password.Service.JwtService;
+import myproject.takemypassword.take_my_password.Service.PasswordResetService;
 import myproject.takemypassword.take_my_password.model.AuthToken;
+import myproject.takemypassword.take_my_password.model.ResetToken;
 import myproject.takemypassword.take_my_password.model.Role;
 import myproject.takemypassword.take_my_password.model.User;
 import myproject.takemypassword.take_my_password.repository.AuthTokenRepository;
+import myproject.takemypassword.take_my_password.repository.ResetTokenRepository;
 import myproject.takemypassword.take_my_password.repository.RoleRepository;
 import myproject.takemypassword.take_my_password.repository.UserRepository;
 
@@ -53,17 +56,22 @@ public class AuthController {
     @Autowired
     RoleRepository roleRepository;
 
-    @Autowired  
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
     AuthTokenRepository authTokenRepository;
 
-    @Autowired 
+    @Autowired
+    ResetTokenRepository resetTokenRepository;
+
+    @Autowired
     EmailService emailService;
 
-    
-     public AuthController(PasswordEncoder passwordEncoder) {
+    @Autowired
+    PasswordResetService passwordResetService;
+
+    public AuthController(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -93,7 +101,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody User registerRequest, BindingResult bindingResult) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             return ResponseEntity.status(400).body("Email già registrata");
-        } 
+        }
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(400).body("Dati di registrazione non validi");
         }
@@ -108,7 +116,7 @@ public class AuthController {
         registerRequest.setRoles(Set.of(roleUser));
         userRepository.save(registerRequest);
 
-        //Generazione token JWT automatico dopo la registrazione
+        // Generazione token JWT automatico dopo la registrazione
         String token = UUID.randomUUID().toString();
         AuthToken authToken = new AuthToken();
         authToken.setToken(token);
@@ -121,7 +129,7 @@ public class AuthController {
         // Inviamo mail all'utente passando i dati del form compilato(per recuperare la
         // mail) e il token generato
         try {
-            emailService.sendVerificationEmail(registerRequest, authToken);           
+            emailService.sendVerificationEmail(registerRequest, authToken);
         } catch (Exception e) {
             System.err.println(e);
         }
@@ -139,10 +147,11 @@ public class AuthController {
         // Se non è scaduto(24h) passiamo a prendere l'utente associato al token e
         // settare il suo stato come verificato
         if (authToken.get().getExpiryDate().isBefore(LocalDateTime.now())) {
+            authTokenRepository.deleteByUser(authToken.get().getUser());
             return ResponseEntity.status(400).body("Token scaduto");
         }
 
-        //Prendo l'utente associato al token
+        // Prendo l'utente associato al token
         User user = authToken.get().getUser();
         user.setVerified(true);
 
@@ -151,5 +160,55 @@ public class AuthController {
         return ResponseEntity.ok("Registrazione confermata con successo");
     }
 
+    // Sezione di reset password
+    @org.springframework.transaction.annotation.Transactional
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam("email") String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(400).body("Email non trovata");
+        }
+
+        User user = userOptional.get();
+
+        ResetToken token = passwordResetService.generateResetToken(user);
+
+        // Invia email di reset password
+        try {
+            emailService.sendPasswordResetEmail(user, token);
+        } catch (Exception e) {
+            System.err.println(e);
+            return ResponseEntity.status(500).body("Errore nell'invio dell'email");
+        }
+
+        return ResponseEntity.ok("Email di reset password inviata con successo");
+    }
+
+    @PostMapping("/reset-password/confirm")
+    public ResponseEntity<?> confirmResetPassword(@RequestParam("token") String token,
+            @RequestBody ResetPasswordDTO requestBody) {
+        Optional<ResetToken> resetTokenOptional = resetTokenRepository.findByToken(token);
+        if (resetTokenOptional.isEmpty()) {
+            return ResponseEntity.status(400).body("Token non valido");
+        }
+
+        ResetToken resetToken = resetTokenOptional.get();
+
+        // Verifica se il token è scaduto
+        if (resetToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.status(400).body("Token scaduto");
+        }
+
+        String newPassword = requestBody.getNewPassword();
+
+        // Aggiorna la password dell'utente
+        User user = resetToken.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        // Rimuovi il token di reset password dopo l'uso
+        resetTokenRepository.delete(resetToken);
+
+        return ResponseEntity.ok("Password resettata con successo");
+    }
 
 }
