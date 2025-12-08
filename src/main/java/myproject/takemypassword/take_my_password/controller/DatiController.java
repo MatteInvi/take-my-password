@@ -1,8 +1,6 @@
 package myproject.takemypassword.take_my_password.controller;
 
-
 import java.util.Optional;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 import jakarta.validation.Valid;
+import myproject.takemypassword.take_my_password.Service.EncryptionService;
 import myproject.takemypassword.take_my_password.model.DatoAccesso;
 import myproject.takemypassword.take_my_password.model.User;
 import myproject.takemypassword.take_my_password.repository.DatiRepository;
@@ -40,16 +38,22 @@ public class DatiController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    EncryptionService encryptionService;
+
     @GetMapping
-    public String index(Model model, @RequestParam(required = false) String query,@RequestParam (defaultValue = "0") int page, Authentication authentication) {
+    public String index(Model model, @RequestParam(required = false) String query,
+            @RequestParam(defaultValue = "0") int page, Authentication authentication) {
         Optional<User> userLogged = userRepository.findByEmail(authentication.getName());
         Page<DatoAccesso> datiAccesso;
 
         if (query != null && !query.isEmpty()) {
-             datiAccesso = datiRepository.findByUserAndPlatformContainingIgnoreCase(userLogged.get(), query, org.springframework.data.domain.PageRequest.of(page, 10)); // 10 dati per pagina
+            datiAccesso = datiRepository.findByUserAndPlatformContainingIgnoreCase(userLogged.get(), query,
+                    org.springframework.data.domain.PageRequest.of(page, 10)); // 10 dati per pagina
         } else {
-             datiAccesso = datiRepository.findByUser(userLogged.get(), org.springframework.data.domain.PageRequest.of(page, 10)); // 10 dati per pagina
-                
+            datiAccesso = datiRepository.findByUser(userLogged.get(),
+                    org.springframework.data.domain.PageRequest.of(page, 10)); // 10 dati per pagina
+
         }
 
         model.addAttribute("pagina", datiAccesso);
@@ -75,6 +79,9 @@ public class DatiController {
         if (bindingResult.hasErrors()) {
             return "archivio/create";
         }
+
+        datoForm.setPassword(encryptionService.encrypt(datoForm.getPassword()));
+        datoForm.setUsername(encryptionService.encrypt(datoForm.getUsername()));
         datoForm.setUser(userLogged.get());
         datiRepository.save(datoForm);
         redirectAttributes.addFlashAttribute("success", "Dato salvato con successo!");
@@ -112,6 +119,9 @@ public class DatiController {
                 if (bindingResult.hasErrors()) {
                     return "archivio/edit";
                 }
+
+                datoForm.setPassword(encryptionService.encrypt(datoForm.getPassword()));
+                datoForm.setUsername(encryptionService.encrypt(datoForm.getUsername()));
                 datoForm.setUser(dato.getUser());
                 datiRepository.save(datoForm);
                 redirectAttributes.addFlashAttribute("success", "Dato modificato con successo!");

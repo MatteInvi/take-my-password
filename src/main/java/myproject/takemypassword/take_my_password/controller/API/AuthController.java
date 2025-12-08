@@ -87,6 +87,10 @@ public class AuthController {
         }
 
         // Se l'autenticazione ha successo, carica i dettagli dell'utente
+        if (!userRepository.findByEmail(loginRequest.username()).get().isVerified()) {
+            return ResponseEntity.status(401).body("Email non verificata");
+        }
+        
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(loginRequest.username());
 

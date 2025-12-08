@@ -30,11 +30,11 @@ public class EmailService {
                     """
                             <html>
 
-                            <body style="background-color: rosybrown; padding:20px;">
+                            <body style="background-color: lightgray; padding:20px;">
                                 <main style="margin:0 auto; width: 50%%; position: relative; top: 50%%;">
                                     <h1 style="">Conferma la tua registrazione</h1>
-                                    <p>Clicca sul seguente link per confermare la registrazione a MyEvents</p>
-                                    <a style="background-color: royalblue; text-align: center; color: black; font-size: x-large; border-radius: 10px; padding: 5px; text-decoration: none; display: block; width: 30%%;"
+                                    <p>Clicca sul seguente link per confermare la registrazione a Take My Password</p>
+                                    <a style="background-color: orange; text-align: center; color: black; font-size: x-large; border-radius: 10px; padding: 5px; text-decoration: none; display: block; width: 30%%;"
                                         href="%s">Conferma</a>
                                 </main>
                             </body>
@@ -58,7 +58,7 @@ public class EmailService {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            String resetUrl = "http://localhost:3000/reset-password?token=" + resetToken.getToken();
+            String resetUrl = "http://localhost:3000/reset-password/confirm?token=" + resetToken.getToken();
 
             helper.setTo(user.getEmail());
             helper.setSubject("Reset della tua password");

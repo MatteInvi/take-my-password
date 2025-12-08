@@ -33,7 +33,7 @@ public class DatoAccesso {
     @JsonBackReference
     private User user;
 
-    @Lob
+    
     private String annotation;
 
     // Getter e Setter

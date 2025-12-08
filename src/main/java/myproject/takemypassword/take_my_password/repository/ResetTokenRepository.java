@@ -20,10 +20,8 @@ public interface ResetTokenRepository extends JpaRepository<ResetToken, Integer>
 
 
 
-@Modifying
+    @Modifying
     @Transactional
-    // 💡 Usa JPQL (Java Persistence Query Language) per l'eliminazione diretta
-    // Questo è più affidabile per le operazioni di DELETE/UPDATE
     @Query("DELETE FROM ResetToken t WHERE t.user = :user")
     int deleteByUser(@Param("user") User user);
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
+import myproject.takemypassword.take_my_password.Service.EncryptionService;
 import myproject.takemypassword.take_my_password.model.DatoAccesso;
 import myproject.takemypassword.take_my_password.model.User;
 import myproject.takemypassword.take_my_password.repository.DatiRepository;
@@ -34,6 +35,9 @@ public class DatiRestController {
     @Autowired
     DatiRepository datiRepository;
 
+    @Autowired
+    EncryptionService encryptionService;
+
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<List<DatoAccesso>> index(Authentication authentication) {
@@ -47,7 +51,15 @@ public class DatiRestController {
                         "Errore: Utente autenticato non trovato. Si prega di effettuare nuovamente il login."));
 
         // Popolo la lista con le credenziali assegnata all'utente loggato
-        datiAccesso = datiRepository.findByUser(userLogged);
+        for (DatoAccesso datoAccesso : datiRepository.findByUser(userLogged)) {
+                datoAccesso.setUsername(encryptionService.decrypt(datoAccesso.getUsername()));
+                datoAccesso.setPassword(encryptionService.decrypt(datoAccesso.getPassword()));
+                datoAccesso.setAnnotation(datoAccesso.getAnnotation());
+                datoAccesso.setPlatform(datoAccesso.getPlatform());
+                datoAccesso.setId(datoAccesso.getId());
+                datoAccesso.setUser(null);
+                datiAccesso.add(datoAccesso);
+        }
 
         // Ritorno il json con la lista
         return ResponseEntity.ok(datiAccesso);
@@ -65,6 +77,10 @@ public class DatiRestController {
 
         // Setto lo user della credenziale all'utente loggato
         nuoveCredenziali.setUser(userLogged);
+
+        //Crypto username e password
+        nuoveCredenziali.setPassword(encryptionService.encrypt(nuoveCredenziali.getPassword()));
+        nuoveCredenziali.setUsername(encryptionService.encrypt(nuoveCredenziali.getUsername()));
 
         // Salvo la nuova credenziale
         DatoAccesso credenzialiSalvate = datiRepository.save(nuoveCredenziali);
@@ -97,10 +113,9 @@ public class DatiRestController {
         }
 
         // Modifico i dati modificabili
-        credenziale.setPassword(credenzialiModificate.getPassword());
-        credenziale.setAnnotation(credenzialiModificate.getAnnotation());
+        credenziale.setPassword(encryptionService.encrypt(credenzialiModificate.getPassword()));
+        credenziale.setUsername(encryptionService.encrypt(credenzialiModificate.getUsername()));
         credenziale.setPlatform(credenzialiModificate.getPlatform());
-        credenziale.setUsername(credenzialiModificate.getUsername());
 
         // Salvo con i nuovi dati
         DatoAccesso credenzialeModificata = datiRepository.save(credenziale);
