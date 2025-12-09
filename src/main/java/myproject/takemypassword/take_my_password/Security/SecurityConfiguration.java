@@ -21,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -37,8 +39,7 @@ public class SecurityConfiguration {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {
-                })
+                .cors(withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
 
@@ -62,6 +63,34 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+
+        // 1. Permetti le credenziali (necessario per l'header Authorization con JWT)
+        config.setAllowCredentials(true);
+
+        // 2. Specifica i domini del tuo frontend
+        // Quando sei in sviluppo
+        config.addAllowedOrigin("http://localhost:3000");
+        // Quando sei su Render.com
+        // Ricorda di cambiare "URL_FRONEND_RENDER" con l'URL effettivo del tuo sito
+        // React su Render
+        config.addAllowedOrigin("https://URL_FRONEND_RENDER.onrender.com"); //MODIFICARE!!!
+
+        // 3. Permetti tutti i metodi HTTP
+        config.addAllowedMethod("*");
+
+        // 4. Permetti tutti gli header (cruciale per l'header Authorization)
+        config.addAllowedHeader("*");
+
+        // Applica questa configurazione a tutti i percorsi
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
     }
 
     @Bean
