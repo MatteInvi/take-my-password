@@ -79,7 +79,7 @@ public class SecurityConfiguration {
         // Quando sei su Render.com
         // Ricorda di cambiare "URL_FRONEND_RENDER" con l'URL effettivo del tuo sito
         // React su Render
-        config.addAllowedOrigin("https://URL_FRONEND_RENDER.onrender.com"); //MODIFICARE!!!
+        config.addAllowedOrigin("https://take-my-password-react-app.onrender.com"); 
 
         // 3. Permetti tutti i metodi HTTP
         config.addAllowedMethod("*");
