@@ -22,6 +22,6 @@ public interface ResetTokenRepository extends JpaRepository<ResetToken, Integer>
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM ResetToken t WHERE t.user = :user")
-    int deleteByUser(@Param("user") User user);
+    @Query("DELETE FROM ResetToken t WHERE t.user.id = :userId")
+    int deleteByUserId(@Param("userId") Integer userId);
 }

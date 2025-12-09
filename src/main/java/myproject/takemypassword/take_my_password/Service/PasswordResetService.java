@@ -22,13 +22,11 @@ ResetTokenRepository resetTokenRepository;
 
 
         // 1️⃣ Elimina eventuale token precedente
-        int deleteCount = 0;
         try{
 
-            deleteCount = resetTokenRepository.deleteByUser(user);
-            System.out.println("Eliminati " + deleteCount + " token precedenti per l'utente: " + user.getEmail());
+         resetTokenRepository.deleteByUserId(user.getId());
         } catch (Exception e){
-            System.out.println("Nessun token precedente da eliminare... Errore:"+ e);
+           new Error("Errore durante la cancellazione del token precedente: " + e.getMessage());
         }
 
 

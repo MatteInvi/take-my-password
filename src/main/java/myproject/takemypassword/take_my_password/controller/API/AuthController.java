@@ -1,6 +1,8 @@
 package myproject.takemypassword.take_my_password.controller.API;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -77,18 +79,21 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest loginRequest) {
+        Map<String, String> response = new HashMap<>();
         try {
             // Tenta di autenticare l'utente
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
         } catch (BadCredentialsException e) {
             // Se le credenziali sono errate, lancia un'eccezione
-            return ResponseEntity.status(401).body("Credenziali non valide");
+            response.put("error", "Credenziali non valide");
+            return ResponseEntity.status(401).body(response);
         }
 
         // Se l'autenticazione ha successo, carica i dettagli dell'utente
         if (!userRepository.findByEmail(loginRequest.username()).get().isVerified()) {
-            return ResponseEntity.status(401).body("Email non verificata");
+            response.put("error", "Email non verificata");
+            return ResponseEntity.status(401).body(response);
         }
         
         final UserDetails userDetails = userDetailsService
@@ -151,13 +156,14 @@ public class AuthController {
         // Se non è scaduto(24h) passiamo a prendere l'utente associato al token e
         // settare il suo stato come verificato
         if (authToken.get().getExpiryDate().isBefore(LocalDateTime.now())) {
-            authTokenRepository.deleteByUser(authToken.get().getUser());
+            authTokenRepository.deleteByUserId(authToken.get().getUser().getId());
             return ResponseEntity.status(400).body("Token scaduto");
         }
 
         // Prendo l'utente associato al token
         User user = authToken.get().getUser();
         user.setVerified(true);
+        authTokenRepository.deleteByUserId(authToken.get().getUser().getId());
 
         // Salvo l'utente aggiornato
         userRepository.save(user);
@@ -210,7 +216,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         // Rimuovi il token di reset password dopo l'uso
-        resetTokenRepository.delete(resetToken);
+        resetTokenRepository.deleteByUserId(user.getId());
 
         return ResponseEntity.ok("Password resettata con successo");
     }

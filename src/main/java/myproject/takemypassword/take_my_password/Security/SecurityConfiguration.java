@@ -53,7 +53,7 @@ public class SecurityConfiguration {
                         .permitAll()
 
                         // Endpoints protetti
-                        .requestMatchers("/api/archive/**").hasAnyAuthority("ADMIN", "USER")
+                        .requestMatchers("/api/archive/*").hasAnyAuthority("ADMIN", "USER")
                         .requestMatchers("/archive/**").hasAnyAuthority("ADMIN", "USER")
 
                         // Tutto il resto richiede autenticazione
