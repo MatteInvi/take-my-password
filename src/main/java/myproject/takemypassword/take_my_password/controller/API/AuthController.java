@@ -142,7 +142,7 @@ public class AuthController {
         } catch (Exception e) {
             System.err.println(e);
         }
-        return ResponseEntity.ok("Registrazione completata con successo");
+        return ResponseEntity.status(200).body("Registrazione completata con successo");
     }
 
     // Sezione di conferma registrazione

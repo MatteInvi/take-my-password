@@ -7,11 +7,9 @@
 
 <body>
     <main class="container">
-        <p><strong style="text-align: center; color: green;" th:text="${success}"></strong></p>
+        <h2 style="text-align: center; color: white;" th:text="${success}"></h2>
 
-        <h1>Errore</h1>
-        <h4 class="text-center" th:text="${error}"></h4>
-
+         <p><strong style="text-align: center; color: red;" th:text="${error}"></strong></p>
         <!-- Script fragment -->
         <section th:insert="~{fragments/footer :: script}"></section>
 </body>
