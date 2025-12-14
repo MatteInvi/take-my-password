@@ -22,7 +22,7 @@ public class EmailService {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            String confirmationUrl = "http://localhost:8080/user/confirm-email?token=" + token.getToken();
+            String confirmationUrl = "https://take-my-password-react-app.onrender.com/confirm?token=" + token.getToken();
 
             helper.setTo(user.getEmail());
             helper.setSubject("Conferma la tua email");
@@ -58,7 +58,7 @@ public class EmailService {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            String resetUrl = "http://localhost:3000/user/reset-password/confirm?token=" + resetToken.getToken();
+            String resetUrl = "https://take-my-password-react-app.onrender.com/reset-password/confirm?token=" + resetToken.getToken();
 
             helper.setTo(user.getEmail());
             helper.setSubject("Reset della tua password");

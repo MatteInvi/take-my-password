@@ -78,7 +78,7 @@ public class SecurityConfiguration {
         // 2. Specifica i domini del tuo frontend
         // Quando sei in sviluppo
         config.addAllowedOrigin("http://10.0.2.2:8080"); // Per emulatore Android
-        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://localhost:3000"); // Per local react
         // Quando sei su Render.com
         // Ricorda di cambiare "URL_FRONEND_RENDER" con l'URL effettivo del tuo sito
         // React su Render

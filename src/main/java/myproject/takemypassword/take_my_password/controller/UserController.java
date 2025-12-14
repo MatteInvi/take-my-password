@@ -21,9 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 import myproject.takemypassword.take_my_password.model.AuthToken;
+import myproject.takemypassword.take_my_password.model.ResetToken;
 import myproject.takemypassword.take_my_password.model.Role;
 import myproject.takemypassword.take_my_password.model.User;
 import myproject.takemypassword.take_my_password.repository.AuthTokenRepository;
+import myproject.takemypassword.take_my_password.repository.ResetTokenRepository;
 import myproject.takemypassword.take_my_password.repository.RoleRepository;
 import myproject.takemypassword.take_my_password.repository.UserRepository;
 
@@ -42,6 +44,9 @@ public class UserController {
 
     @Autowired
     AuthTokenRepository authTokenRepository;
+
+    @Autowired
+    ResetTokenRepository resetTokenRepository;
 
     @GetMapping("/show/{id}")
     public String show(@PathVariable Integer id, Model model) {
@@ -176,4 +181,30 @@ public class UserController {
             return "pages/error";
         }
     }
+
+    //Sezione reset password
+    @GetMapping("/password-reset/confirm")
+    public String passwordReset(Model model,@RequestParam String token){
+
+        Optional<ResetToken> resetTokenOptional = resetTokenRepository.findByToken(token);
+        if (resetTokenOptional.isEmpty() || resetTokenOptional == null){
+            model.addAttribute("error", "Token non valido!");
+            return "pages/error";
+        } 
+
+        ResetToken resetToken = resetTokenOptional.get();
+
+        if (resetToken.getExpiryDate().isBefore(LocalDateTime.now())){
+            model.addAttribute("error", "Token scaduto, ripetere la procedura di reset");
+            resetTokenRepository.delete(resetToken);
+            return "pages/error";
+        }
+        
+        User user = resetToken.getUser();
+
+        model.addAttribute("user", user);
+        return "utenti/reset-password";
+    }
+
+
 }
