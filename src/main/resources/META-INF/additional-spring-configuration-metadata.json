@@ -18,5 +18,10 @@
     "name": "app.encryption.secret-key",
     "type": "java.lang.String",
     "description": "A description for 'app.encryption.secret-key'"
+  },
+  {
+    "name": "resend.mail.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'resend.mail.api.key'"
   }
 ]}
