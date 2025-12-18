@@ -18,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -95,7 +97,7 @@ public class AuthController {
             response.put("error", "Email non verificata");
             return ResponseEntity.status(401).body(response);
         }
-        
+
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(loginRequest.username());
 
@@ -219,6 +221,85 @@ public class AuthController {
         resetTokenRepository.deleteByUserId(user.getId());
 
         return ResponseEntity.ok("Password resettata con successo");
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateUserProfile(@RequestHeader("Authorization") String baererToken,
+            @Valid @RequestBody User updateRequest, BindingResult bindingResult) {
+
+        if (baererToken == null || !baererToken.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token mancante o non valido");
+        }
+
+        String token = baererToken.substring(7);
+
+        if (token.isEmpty() || jwtService.isTokenExpired(token)) {
+            return ResponseEntity.status(401).body("Sessione scaduto o non autorizzata");
+
+        }
+
+        try {
+
+            String email = jwtService.extractUsername(token);
+
+            Optional<User> existingUserOptinal = userRepository.findByEmail(email);
+
+            User existingUser = existingUserOptinal.get();
+
+            if (!existingUser.getId().equals(updateRequest.getId())) {
+                return ResponseEntity.status(403).body("Non hai i permessi per modificare l'utente");
+            }
+
+            if (!existingUser.getEmail().equals(updateRequest.getEmail()) &&
+                    userRepository.existsByEmail(updateRequest.getEmail())) {
+                return ResponseEntity.status(400).body("Email già occupata da un altro utente");
+            }
+
+            if (bindingResult.hasErrors()) {
+                return ResponseEntity.status(400).body("Dati non validi");
+            }
+
+            existingUser.setName(updateRequest.getName());
+            existingUser.setSurname(updateRequest.getSurname());
+            existingUser.setEmail(updateRequest.getEmail());
+            existingUser.setPassword(passwordEncoder.encode(updateRequest.getPassword()));
+
+            userRepository.save(existingUser);
+
+            return ResponseEntity.ok("Profilo aggiornato con successo");
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Token non valido");
+        }
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String bearerToken) {
+
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("Token mancante");
+        }
+
+        String token = bearerToken.substring(7);
+
+        try {
+
+            String email = jwtService.extractUsername(token);
+
+            if (jwtService.isTokenExpired(token)) {
+                return ResponseEntity.status(401).body("Token scaduto");
+            }
+
+            Optional<User> userOptional = userRepository.findByEmail(email);
+
+            if (userOptional.isPresent()) {
+                return ResponseEntity.ok(userOptional.get());
+            } else {
+                return ResponseEntity.status(404).body("Utente non trovato");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Token non valdio");
+        }
+
     }
 
 }

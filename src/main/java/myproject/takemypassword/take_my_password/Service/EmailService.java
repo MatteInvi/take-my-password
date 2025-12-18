@@ -40,7 +40,7 @@ public class EmailService {
                             <main style="margin:0 auto; width: 50%%; position: relative; top: 50%%;">
                                 <h1 style="">Conferma la tua registrazione</h1>
                                 <p>Clicca sul seguente link per confermare la registrazione a Take My Password</p>
-                                <a style="background-color: orange; text-align: center; color: black; font-size: x-large; border-radius: 10px; padding: 5px; text-decoration: none; display: block; width: 30%%;"
+                                <a style="background-color: orange; text-align: center; color: black; font-size: x-large; border-radius: 10px; padding: 5px; text-decoration: none; display: block; width: 30%%; min-width:110px;"
                                     href="%s">Conferma</a>
                             </main>
                         </body>
@@ -81,7 +81,7 @@ public class EmailService {
                             <main style="margin:0 auto; width: 50%%; position: relative; top: 50%%;">
                                 <h1 style="">Reset della tua password</h1>
                                 <p>Clicca sul seguente link per resettare la tua password</p>
-                                <a style="background-color: orange; text-align: center; color: black; font-size: x-large; border-radius: 10px; padding: 5px; text-decoration: none; display: block; width: 30%%;"
+                                <a style="background-color: orange; text-align: center; color: black; font-size: x-large; border-radius: 10px; padding: 5px; text-decoration: none; display: block; width: 30%%; min-width:110px;"
                                     href="%s">Reset Password</a>
                             </main>
                         </body>
