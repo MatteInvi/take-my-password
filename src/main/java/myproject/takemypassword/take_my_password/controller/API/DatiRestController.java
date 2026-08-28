@@ -1,6 +1,5 @@
 package myproject.takemypassword.take_my_password.controller.API;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -30,14 +29,18 @@ import myproject.takemypassword.take_my_password.repository.UserRepository;
 @RequestMapping("/api/archive")
 public class DatiRestController {
 
-        @Autowired
-        UserRepository userRepository;
+        private final UserRepository userRepository;
 
-        @Autowired
-        DatiRepository datiRepository;
+        private final DatiRepository datiRepository;
 
-        @Autowired
-        EncryptionService encryptionService;
+        private final EncryptionService encryptionService;
+
+        public DatiRestController(UserRepository userRepository, DatiRepository datiRepository,
+                        EncryptionService encryptionService) {
+                this.userRepository = userRepository;
+                this.datiRepository = datiRepository;
+                this.encryptionService = encryptionService;
+        }
 
         @GetMapping
         @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")

@@ -1,6 +1,6 @@
 package myproject.takemypassword.take_my_password.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,13 @@ import myproject.takemypassword.take_my_password.model.User;
 @Service
 public class EmailService {
 
-    @Autowired
-    JavaMailSender mailSender;
+    final JavaMailSender mailSender;
 
     private final Resend resend;
 
-    public EmailService(@Value("${resend.mail.api.key}") String apiKey) {
+    public EmailService(@Value("${resend.mail.api.key}") String apiKey, JavaMailSender mailSender) {
         this.resend = new Resend(apiKey);
+        this.mailSender = mailSender;
     }
 
     // Email di invio token di verifica

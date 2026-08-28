@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,20 +32,25 @@ import myproject.takemypassword.take_my_password.repository.UserRepository;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    AuthTokenRepository authTokenRepository;
+    private final AuthTokenRepository authTokenRepository;
 
-    @Autowired
-    ResetTokenRepository resetTokenRepository;
+    private final ResetTokenRepository resetTokenRepository;
+
+    public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder,
+            RoleRepository roleRepository, AuthTokenRepository authTokenRepository,
+            ResetTokenRepository resetTokenRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        this.authTokenRepository = authTokenRepository;
+        this.resetTokenRepository = resetTokenRepository;
+    }
 
     @GetMapping("/show/{id}")
     public String show(@PathVariable Integer id, Model model) {

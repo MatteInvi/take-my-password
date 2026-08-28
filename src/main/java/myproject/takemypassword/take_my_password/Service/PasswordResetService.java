@@ -1,6 +1,5 @@
 package myproject.takemypassword.take_my_password.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +13,11 @@ import java.util.UUID;
 @Service
 public class PasswordResetService {
 
-@Autowired
-ResetTokenRepository resetTokenRepository;
+final ResetTokenRepository resetTokenRepository;
+
+    PasswordResetService(ResetTokenRepository resetTokenRepository) {
+        this.resetTokenRepository = resetTokenRepository;
+    }
 
     @Transactional
     public ResetToken generateResetToken(User user) {

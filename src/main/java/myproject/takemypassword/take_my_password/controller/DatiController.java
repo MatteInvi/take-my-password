@@ -2,7 +2,6 @@ package myproject.takemypassword.take_my_password.controller;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,17 +28,21 @@ import myproject.takemypassword.take_my_password.repository.UserRepository;
 @RequestMapping("/archive")
 public class DatiController {
 
-    @Autowired
-    DatiRepository datiRepository;
+    private final DatiRepository datiRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    EncryptionService encryptionService;
+    private final EncryptionService encryptionService;
+
+    public DatiController(DatiRepository datiRepository, RoleRepository roleRepository,
+            UserRepository userRepository, EncryptionService encryptionService) {
+        this.datiRepository = datiRepository;
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.encryptionService = encryptionService;
+    }
 
     @GetMapping
     public String index(Model model, @RequestParam(required = false) String query,

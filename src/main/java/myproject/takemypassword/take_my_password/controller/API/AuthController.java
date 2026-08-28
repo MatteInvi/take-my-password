@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -45,38 +44,41 @@ import myproject.takemypassword.take_my_password.repository.UserRepository;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    final AuthenticationManager authenticationManager;
 
-    @Autowired
-    UserDetailsService userDetailsService;
+    final UserDetailsService userDetailsService;
 
-    @Autowired
-    JwtService jwtService;
+    final JwtService jwtService;
 
-    @Autowired
-    UserRepository userRepository;
+    final UserRepository userRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
+    final RoleRepository roleRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    AuthTokenRepository authTokenRepository;
+    final AuthTokenRepository authTokenRepository;
 
-    @Autowired
-    ResetTokenRepository resetTokenRepository;
+    final ResetTokenRepository resetTokenRepository;
 
-    @Autowired
-    EmailService emailService;
+    final EmailService emailService;
 
-    @Autowired
-    PasswordResetService passwordResetService;
+    final PasswordResetService passwordResetService;
 
-    public AuthController(PasswordEncoder passwordEncoder) {
+    public AuthController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
+            UserDetailsService userDetailsService, JwtService jwtService,
+            PasswordResetService passwordResetService, EmailService emailService,
+            ResetTokenRepository resetTokenRepository, RoleRepository roleRepository,
+            UserRepository userRepository, AuthTokenRepository authTokenRepository) {
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
+        this.passwordResetService = passwordResetService;
+        this.emailService = emailService;
+        this.resetTokenRepository = resetTokenRepository;
+        this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.authTokenRepository = authTokenRepository;
     }
 
     @PostMapping("/login")

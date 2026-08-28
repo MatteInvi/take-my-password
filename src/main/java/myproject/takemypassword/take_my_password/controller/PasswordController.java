@@ -1,6 +1,5 @@
 package myproject.takemypassword.take_my_password.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +12,11 @@ import myproject.takemypassword.take_my_password.Service.PasswordService;
 @RequestMapping("/password")
 public class PasswordController {
 
-    @Autowired
-    PasswordService passwordService;
+    private final PasswordService passwordService;
+
+    public PasswordController(PasswordService passwordService) {
+        this.passwordService = passwordService;
+    }
 
     @GetMapping
     public String home(){

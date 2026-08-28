@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
@@ -23,8 +22,11 @@ import myproject.takemypassword.take_my_password.repository.UserRepository;
 @org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvice {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public ControllerAdvice(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @ModelAttribute
     public void addLoggedUser(Model model, Authentication authentication) {
