@@ -14,9 +14,11 @@ public interface AuthTokenRepository extends JpaRepository<AuthToken, Integer> {
 
     public Optional<AuthToken> findByToken(String token);
 
-    // Modifica la query per usare l'ID dell'utente correlato
+    public int deleteByExpiryDateBefore(java.time.LocalDateTime dateTime);
+
+  
     @Modifying
     @Transactional
     @Query("DELETE FROM AuthToken t WHERE t.user.id = :userId")
-    int deleteByUserId(@Param("userId") Integer userId); // Usa il tipo ID corretto
+    int deleteByUserId(@Param("userId") Integer userId); 
 }

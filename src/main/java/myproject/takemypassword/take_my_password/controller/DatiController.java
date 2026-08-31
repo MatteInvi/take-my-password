@@ -30,7 +30,7 @@ public class DatiController {
 
     private final DatiRepository datiRepository;
 
-    private final RoleRepository roleRepository;
+
 
     private final UserRepository userRepository;
 
@@ -39,7 +39,6 @@ public class DatiController {
     public DatiController(DatiRepository datiRepository, RoleRepository roleRepository,
             UserRepository userRepository, EncryptionService encryptionService) {
         this.datiRepository = datiRepository;
-        this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.encryptionService = encryptionService;
     }

@@ -16,6 +16,8 @@ public interface ResetTokenRepository extends JpaRepository<ResetToken, Integer>
      public Optional<ResetToken> findByToken(String token);
      public Optional<ResetToken> findByUser(User user);
 
+     public int deleteByExpiryDateBefore(java.time.LocalDateTime dateTime);
+
 
 
 
